@@ -30,7 +30,6 @@ class _LightDashboardState extends State<LightDashboardWidget> {
             padding: const EdgeInsets.all(1.5),
             crossAxisCount: 2,
             mainAxisSpacing: 1.0,
-            crossAxisSpacing: 1.0,
             childAspectRatio: 1.3,
             children: lightStore.lights
                 .map((light) =>
