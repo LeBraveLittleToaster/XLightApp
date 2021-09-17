@@ -16,7 +16,7 @@ class ModeSelectorWidget extends StatefulWidget {
 }
 
 class _ModeSelectorState extends State<ModeSelectorWidget> {
-  var _controller = PageController(viewportFraction: 1 / 5);
+  final _controller = PageController(viewportFraction: 1 / 5);
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -31,14 +31,14 @@ class _ModeSelectorState extends State<ModeSelectorWidget> {
               widget.onModeSet(widget.modes[index].modeId);
               Navigator.pop(context);
             },
-            child: Container(
+            child: SizedBox(
               width: MediaQuery.of(context).size.width / 5,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.end,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
+                  const Padding(
+                    padding: EdgeInsets.all(8.0),
                     child: Icon(Icons.ac_unit_outlined),
                   ),
                   Padding(

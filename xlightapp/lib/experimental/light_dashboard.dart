@@ -88,17 +88,3 @@ Widget getGridLightItem(
         )),
   );
 }
-
-
-/*
-SwitchListTile(value: value, onChanged: onChanged
-          trailing: IconButton(
-            iconSize: 36,
-            icon: Icon(
-              light.isOn ? Icons.lightbulb : Icons.lightbulb_outline,
-              color: light.isOn ? Colors.yellow : Colors.grey,
-            ),
-            onPressed: () => toggleLight(light, lightStore),
-          ),
-          
-          */

@@ -47,6 +47,12 @@ class LightStore extends ChangeNotifier {
     notifyListeners();
   }
 
+  void setLightState(MtsLight light, MtsLightState state){
+    int lightIndex = lights.indexOf(light);
+    lights[lightIndex].state = state;
+    notifyListeners();
+  }
+
   List<MtsValue> generateDefaultValues(MtsMode mode) {
     List<MtsValue> mtsValues = [];
     for (int i = 0; i < mode.inputs.length; i++) {

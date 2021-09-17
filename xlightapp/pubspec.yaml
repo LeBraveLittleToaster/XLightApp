@@ -38,6 +38,8 @@ dependencies:
   http: ^0.13.3
   flutter_switch: ^0.3.2
   modal_bottom_sheet: ^2.0.0
+  sleek_circular_slider: ^2.0.1
+  
 
 dev_dependencies:
   flutter_test:

@@ -29,7 +29,7 @@ class _LightStateSetterState extends State<LightStateSetterWidget> {
     List<Widget> widgets = [
       Text("Mode=" + (widget.light.state?.modeId.toString() ?? "NotSet"))
     ];
-    widgets.addAll(getInputWidgets(modeStore));
+    widgets.addAll(getInputWidgets(modeStore, widget.light));
     return Scaffold(
       appBar: getXLightAppBar(widget.light.name),
       body: Column(
@@ -39,7 +39,7 @@ class _LightStateSetterState extends State<LightStateSetterWidget> {
       floatingActionButton: FloatingActionButton(
         foregroundColor: Colors.transparent,
         backgroundColor: Colors.transparent,
-        child: Icon(
+        child: const Icon(
           Icons.arrow_upward,
           color: Colors.black,
         ),
@@ -65,22 +65,25 @@ class _LightStateSetterState extends State<LightStateSetterWidget> {
         modeStore.modes.firstWhere((element) => element.modeId == modeId));
   }
 
-  List<Widget> getInputWidgets(ModeStore modeStore) {
+  List<Widget> getInputWidgets(ModeStore modeStore, MtsLight light) {
     return getInputsForLight(widget.light.state?.modeId ?? 0, modeStore)
-        .map((mtsInput) => buildWidgetForInput(mtsInput))
+        .asMap()
+        .entries
+        .map((mtsInputEntry) =>
+            buildWidgetForInput(light, mtsInputEntry.key, mtsInputEntry.value))
         .toList();
   }
 
-  Widget buildWidgetForInput(MtsInput mtsInput) {
+  Widget buildWidgetForInput(MtsLight light, int inputIndex, MtsInput mtsInput) {
     switch (mtsInput.inputType) {
       case InputType.HSV:
-        return HsvInputWidget(input: mtsInput);
+        return HsvInputWidget(light:light, inputIndex: inputIndex,input: mtsInput);
       case InputType.HSVB:
-        return HsvbInputWidget(input: mtsInput);
+        return HsvbInputWidget(light:light,inputIndex: inputIndex, input: mtsInput);
       case InputType.SINGLE_DOUBLE:
-        return SingleInputWidget(input: mtsInput);
+        return SingleInputWidget(light:light,inputIndex: inputIndex,input: mtsInput);
       case InputType.RANGE_2_DOUBLE:
-        return Range2InputWidget(input: mtsInput);
+        return Range2InputWidget(light:light,inputIndex: inputIndex,input: mtsInput);
     }
   }
 
