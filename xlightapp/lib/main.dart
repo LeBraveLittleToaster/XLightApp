@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:xlightapp/experimental/mode_list_view.dart';
-import 'package:xlightapp/net/requester.dart';
+import 'package:xlightapp/experimental/light_dashboard.dart';
 import 'package:xlightapp/stores/mts_light_store.dart';
 import 'package:xlightapp/stores/mts_mode_store.dart';
+import 'package:xlightapp/xlight_appbar.dart';
 
 void main() {
   runApp(const MyApp());
@@ -22,8 +22,8 @@ class MyApp extends StatelessWidget {
       builder: (context, child) {
         return MaterialApp(
             title: 'Flutter Demo',
-            theme: ThemeData.dark(),
-            home: MyHomePage(title: "Hi Title"));
+            theme: ThemeData.light(),
+            home: const MyHomePage(title: "Hi Title"));
       },
     );
   }
@@ -38,29 +38,21 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-  String text = "";
-
-  void _incrementCounter() async {
-    var lights = await Requester.getModeList();
-    setState(() {
-      text = lights.toString();
-      _counter++;
-    });
-  }
+  bool showsOnlyOffLights = false;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: Center(child: ModeListView()),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ),
+      appBar: getXLightAppBar("Home"),
+      body: Container(
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
+          decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                  colors: [Colors.white, Color.fromARGB(255, 232, 237, 247)])),
+          child: Center(child: LightDashboardWidget())),
     );
   }
 }
