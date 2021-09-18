@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 
-class MtsValue extends ChangeNotifier{
+class MtsValue extends ChangeNotifier {
   int valueId;
   List<double> values;
   MtsValue({required this.valueId, required this.values});

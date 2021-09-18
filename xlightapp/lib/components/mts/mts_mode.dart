@@ -1,8 +1,9 @@
 import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
 import 'package:xlightapp/components/mts/mts_input.dart';
 
-class MtsMode {
+class MtsMode extends ChangeNotifier{
   int modeId;
   String name;
   int changeDateUTC;

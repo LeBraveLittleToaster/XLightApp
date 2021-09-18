@@ -9,7 +9,7 @@ extension InputTypeDescriptor on InputType {
   String get value => describeEnum(this);
 }
 
-class MtsInput {
+class MtsInput extends ChangeNotifier {
   InputType inputType;
   String jsonKey;
   String uiLabel;
