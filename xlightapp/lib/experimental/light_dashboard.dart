@@ -23,20 +23,45 @@ class _LightDashboardState extends State<LightDashboardWidget> {
   Widget build(BuildContext context) {
     LightStore lightStore = Provider.of<LightStore>(context);
     ModeStore modeStore = Provider.of<ModeStore>(context, listen: false);
-    return Column(
-      children: [
-        Expanded(
-          child: GridView.count(
-            padding: const EdgeInsets.all(1.5),
-            crossAxisCount: 2,
-            mainAxisSpacing: 1.0,
-            childAspectRatio: 1.3,
-            children: lightStore.lights
-                .map((light) =>
-                    getGridLightItem(light, _toggleLight, lightStore, context))
-                .toList(),
+    List<Widget> gridItems = lightStore.lights
+        .map((light) =>
+            getGridLightItem(light, _toggleLight, lightStore, context))
+        .toList();
+    return CustomScrollView(
+      slivers: [
+        SliverAppBar(
+          snap: true,
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(36),
+                  bottomRight: Radius.circular(36))),
+          elevation: 30,
+          shadowColor: Colors.black,
+          actions: [
+            IconButton(
+                onPressed: () {
+                  print("Hello World");
+                },
+                icon: Icon(Icons.photo))
+          ],
+          stretch: true,
+          floating: true,
+          flexibleSpace: FlexibleSpaceBar(
+            title: Text("My Dashboard"),
+            centerTitle: true,
+            stretchModes: [
+              StretchMode.zoomBackground,
+              StretchMode.blurBackground,
+              StretchMode.fadeTitle
+            ],
           ),
+          expandedHeight: 250,
         ),
+        SliverGrid.count(
+            crossAxisSpacing: 1.0,
+            mainAxisSpacing: 1.3,
+            crossAxisCount: 2,
+            children: gridItems)
       ],
     );
   }

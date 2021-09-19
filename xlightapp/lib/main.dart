@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:xlightapp/experimental/light_dashboard.dart';
 import 'package:xlightapp/stores/mts_light_store.dart';
 import 'package:xlightapp/stores/mts_mode_store.dart';
 import 'package:xlightapp/xlight_appbar.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await SystemChrome.setPreferredOrientations(
+    [DeviceOrientation.portraitUp],
+  );
   runApp(const MyApp());
 }
 
@@ -14,7 +19,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<ModeStore>(create: (_) => ModeStore().init()),
@@ -44,14 +48,13 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: getXLightAppBar("Home"),
       body: Container(
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
           decoration: const BoxDecoration(
               gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
                   colors: [Colors.white, Color.fromARGB(255, 232, 237, 247)])),
           child: Center(child: LightDashboardWidget())),
     );

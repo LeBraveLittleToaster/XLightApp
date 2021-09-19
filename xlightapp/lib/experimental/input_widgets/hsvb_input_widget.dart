@@ -64,6 +64,7 @@ class _HsvbInputWidget extends State<HsvbInputWidget> {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Card(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
         child: Column(
           children: [
             Padding(
