@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:xlightapp/components/mts/mts_input.dart';
 import 'package:xlightapp/components/mts/mts_light.dart';
@@ -29,15 +31,25 @@ class LightStore extends ChangeNotifier {
           state: null));
       notifyListeners();
     } else {
-      Requester.getLightList().then((List<MtsLight> lights) {
-        this.lights = lights;
-        print("++++++++++++++++++ LOADED LIGHTS +++++++++++++++++++");
-        print(lights.toString());
-        print("++++++++++++++++++ LOADED LIGHTS +++++++++++++++++++");
-        notifyListeners();
-      });
+      refreshLights();
     }
     return this;
+  }
+
+  Future<void> refreshLights() {
+    var completer = Completer<void>();
+    Requester.getLightList().then((List<MtsLight> lights) {
+      this.lights = lights;
+      print("++++++++++++++++++ LOADED LIGHTS +++++++++++++++++++");
+      print(lights.toString());
+      print("++++++++++++++++++ LOADED LIGHTS +++++++++++++++++++");
+      completer.complete();
+      notifyListeners();
+    }).catchError((err, stack) {
+      completer.completeError(err);
+      return Future.error(err);
+    });
+    return completer.future;
   }
 
   void toggleLight(MtsLight light) {

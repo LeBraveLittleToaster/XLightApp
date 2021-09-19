@@ -28,40 +28,53 @@ class _LightDashboardState extends State<LightDashboardWidget> {
             getGridLightItem(light, _toggleLight, lightStore, context))
         .toList();
     return NestedScrollView(
-        headerSliverBuilder: (context, bool innerBoxIsScrolled) {
-      return <Widget>[
-        SliverOverlapAbsorber(
-          handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
-          sliver: SliverAppBar(
-            backgroundColor: Colors.transparent,
-            elevation: 0,
-            shadowColor: Colors.transparent,
-            pinned: true,
-            expandedHeight: 300,
-            flexibleSpace: FlexibleSpaceBar(
-                background: Image.asset(
-                  'assets/sliver_bg.png',
-                  fit: BoxFit.cover,
-                ),
-                centerTitle: true,
-                title: const Text(
-                  "Light Studio",
-                  style: TextStyle(color: Colors.black),
-                )),
-          ),
-        )
-      ];
-    }, body: SafeArea(child: Builder(builder: (context) {
-      return CustomScrollView(slivers: [
-        SliverOverlapInjector(
-            handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context)),
-        SliverGrid.count(
-            crossAxisSpacing: 1.0,
-            mainAxisSpacing: 1.0,
-            crossAxisCount: 2,
-            children: gridItems)
-      ]);
-    })));
+      headerSliverBuilder: (context, bool innerBoxIsScrolled) {
+        return <Widget>[
+          SliverOverlapAbsorber(
+            handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+            sliver: SliverAppBar(
+              backgroundColor: Colors.transparent,
+              elevation: 0,
+              shadowColor: Colors.transparent,
+              pinned: true,
+              expandedHeight: 300,
+              flexibleSpace: FlexibleSpaceBar(
+                  background: Image.asset(
+                    'assets/sliver_bg.png',
+                    fit: BoxFit.cover,
+                  ),
+                  centerTitle: true,
+                  title: const Text(
+                    "Light Studio",
+                    style: TextStyle(color: Colors.black),
+                  )),
+            ),
+          )
+        ];
+      },
+      body: SafeArea(
+        child: Builder(
+          builder: (context) {
+            return RefreshIndicator(
+              onRefresh: () {
+                print("HEllo World");
+                return lightStore.refreshLights();
+              },
+              child: CustomScrollView(slivers: [
+                SliverOverlapInjector(
+                    handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
+                        context)),
+                SliverGrid.count(
+                    crossAxisSpacing: 1.0,
+                    mainAxisSpacing: 1.0,
+                    crossAxisCount: 2,
+                    children: gridItems)
+              ]),
+            );
+          },
+        ),
+      ),
+    );
   }
 }
 
