@@ -64,10 +64,11 @@ class _HsvbInputWidget extends State<HsvbInputWidget> {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Card(
-        child: Center(
-          child: Column(
-            children: [
-              Center(
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(8, 16, 8, 8),
+              child: Center(
                 child: ConstrainedBox(
                     constraints:
                         const BoxConstraints(minWidth: 300, maxWidth: 800),
@@ -111,27 +112,27 @@ class _HsvbInputWidget extends State<HsvbInputWidget> {
                       },
                     )),
               ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(0, 16, 0, 0),
-                child: Text(
-                  "Brightness",
-                  style: TextStyle(fontSize: 18),
-                ),
+            ),
+            const Padding(
+              padding: EdgeInsets.fromLTRB(0, 16, 0, 0),
+              child: Text(
+                "Brightness",
+                style: TextStyle(fontSize: 18),
               ),
-              Slider(
-                  min: 0,
-                  max: 255,
-                  onChangeEnd: (brightness) {
-                    setBrightness(lightStore, brightness);
-                  },
-                  value: _rangeValue,
-                  onChanged: (double changedValues) {
-                    setState(() {
-                      _rangeValue = changedValues;
-                    });
-                  })
-            ],
-          ),
+            ),
+            Slider(
+                min: 0,
+                max: 255,
+                onChangeEnd: (brightness) {
+                  setBrightness(lightStore, brightness);
+                },
+                value: _rangeValue,
+                onChanged: (double changedValues) {
+                  setState(() {
+                    _rangeValue = changedValues;
+                  });
+                })
+          ],
         ),
       ),
     );

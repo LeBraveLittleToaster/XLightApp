@@ -47,6 +47,12 @@ class LightStore extends ChangeNotifier {
     notifyListeners();
   }
 
+  void updateLightStateValue(MtsLight light, int inputIndex, List<double> values){
+    int lightIndex = lights.indexOf(light);
+    lights[lightIndex].state?.values[inputIndex].values = values;
+    notifyListeners();
+  }
+
   void setLightState(MtsLight light, MtsLightState state){
     int lightIndex = lights.indexOf(light);
     lights[lightIndex].state = state;

@@ -7,6 +7,8 @@ import 'package:xlightapp/loading_view.dart';
 import 'package:xlightapp/stores/mts_mode_store.dart';
 
 class ModeListView extends StatefulWidget {
+  const ModeListView({Key? key}) : super(key: key);
+
   @override
   State<StatefulWidget> createState() => ModeListViewState();
 }
@@ -42,8 +44,8 @@ class ModeListViewState extends State<ModeListView> {
 }
 
 class _ModeListViewSubItem extends StatelessWidget {
-  MtsInput mtsInput;
-  _ModeListViewSubItem({
+  final MtsInput mtsInput;
+  const _ModeListViewSubItem({
     Key? key,
     required this.mtsInput,
   }) : super(key: key);
