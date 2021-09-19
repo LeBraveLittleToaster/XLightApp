@@ -5,9 +5,12 @@ class MtsValue extends ChangeNotifier {
   List<double> values;
   MtsValue({required this.valueId, required this.values});
 
-  factory MtsValue.fromJson(Map<String, dynamic> json) => MtsValue(
-      valueId: json["valueId"],
-      values: json["values"] == null ? [] : json["values"].cast<int>());
+  factory MtsValue.fromJson(Map<String, dynamic> json) {
+    List<double>? values = json["values"]?.cast<double>();
+    return MtsValue(
+        valueId: json["valueId"],
+        values: values ??  []);
+  }
 
   Map<String, dynamic> toJson() => {"valueId": valueId, "values": values};
 

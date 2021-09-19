@@ -6,6 +6,8 @@ import 'package:xlightapp/stores/mts_light_store.dart';
 import 'package:xlightapp/stores/mts_mode_store.dart';
 import 'package:xlightapp/xlight_appbar.dart';
 
+final bool isInTestState = false;
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await SystemChrome.setPreferredOrientations(
@@ -21,8 +23,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider<ModeStore>(create: (_) => ModeStore().init()),
-        ChangeNotifierProvider<LightStore>(create: (_) => LightStore().init())
+        ChangeNotifierProvider<ModeStore>(
+            create: (_) => ModeStore().init(isInTestState)),
+        ChangeNotifierProvider<LightStore>(
+            create: (_) => LightStore().init(isInTestState))
       ],
       builder: (context, child) {
         return MaterialApp(

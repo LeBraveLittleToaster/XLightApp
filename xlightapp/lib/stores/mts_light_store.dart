@@ -9,34 +9,41 @@ import 'package:xlightapp/net/requester.dart';
 class LightStore extends ChangeNotifier {
   List<MtsLight> lights = [];
 
-  LightStore init() {
-    lights.add(MtsLight(
-        name: "Headlamp",
-        location: "Living Room",
-        mac: "Mac1",
-        isOn: false,
-        supportedModes: [1, 2, 3, 5],
-        state: null));
-    lights.add(MtsLight(
-        name: "TV Backlight",
-        location: "Living Room",
-        mac: "Mac2",
-        isOn: false,
-        supportedModes: [1, 4, 5],
-        state: null));
-    notifyListeners();
-    /*
-    Requester.getLightList().then((List<MtsLight> lights) {
-      this.lights = lights;
+  LightStore init(bool testMe) {
+    if (testMe) {
+      lights.add(MtsLight(
+          id: 0,
+          name: "Headlamp",
+          location: "Living Room",
+          mac: "Mac1",
+          isOn: false,
+          supportedModes: [1, 2, 3, 5],
+          state: null));
+      lights.add(MtsLight(
+          id: 1,
+          name: "TV Backlight",
+          location: "Living Room",
+          mac: "Mac2",
+          isOn: false,
+          supportedModes: [1, 4, 5],
+          state: null));
       notifyListeners();
-    });
-    */
+    } else {
+      Requester.getLightList().then((List<MtsLight> lights) {
+        this.lights = lights;
+        print("++++++++++++++++++ LOADED LIGHTS +++++++++++++++++++");
+        print(lights.toString());
+        print("++++++++++++++++++ LOADED LIGHTS +++++++++++++++++++");
+        notifyListeners();
+      });
+    }
     return this;
   }
 
   void toggleLight(MtsLight light) {
     int indexOfLight = lights.indexOf(light);
     lights[indexOfLight].isOn = !lights[indexOfLight].isOn;
+    synchronizeLightIsOn(light.id, lights[indexOfLight].isOn);
     notifyListeners();
   }
 
@@ -44,6 +51,7 @@ class LightStore extends ChangeNotifier {
     int lightIndex = lights.indexOf(light);
     lights[lightIndex].state =
         MtsLightState(modeId: mode.modeId, values: generateDefaultValues(mode));
+    synchronizeLightStateToServer(light.id, lights[lightIndex].state!);
     notifyListeners();
   }
 
@@ -51,12 +59,14 @@ class LightStore extends ChangeNotifier {
       MtsLight light, int inputIndex, List<double> values) {
     int lightIndex = lights.indexOf(light);
     lights[lightIndex].state?.values[inputIndex].values = values;
+    synchronizeLightStateToServer(light.id, lights[lightIndex].state!);
     notifyListeners();
   }
 
   void setLightState(MtsLight light, MtsLightState state) {
     int lightIndex = lights.indexOf(light);
     lights[lightIndex].state = state;
+    synchronizeLightStateToServer(light.id, lights[lightIndex].state!);
     notifyListeners();
   }
 
@@ -82,5 +92,16 @@ class LightStore extends ChangeNotifier {
       case InputType.RANGE_2_DOUBLE:
         return [0.0, 255.0];
     }
+  }
+
+  void synchronizeLightStateToServer(int lightId, MtsLightState lightState) {
+    print("Synchronizing lightstate: " + lightState.toString());
+    Requester.setLightState(lightId, lightState)
+        .then((value) => print("Success setting lightstate"));
+  }
+
+  void synchronizeLightIsOn(int lightId, bool isOn) {
+    Requester.setLightIsOn(lightId, isOn)
+        .then((value) => print("Success setting isOn"));
   }
 }

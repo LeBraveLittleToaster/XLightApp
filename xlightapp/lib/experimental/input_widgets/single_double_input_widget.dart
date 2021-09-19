@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:xlightapp/components/mts/mts_input.dart';
 import 'package:xlightapp/components/mts/mts_light.dart';
+import 'package:xlightapp/experimental/input_widgets/input_consts.dart';
 import 'package:xlightapp/stores/mts_light_store.dart';
 
 class SingleInputWidget extends StatefulWidget {
@@ -40,7 +41,13 @@ class _SingleInputWidget extends State<SingleInputWidget> {
       elevation: 1,
       child: Column(
         children: [
-          Text(widget.input.uiLabel),
+          Padding(
+            padding: inputTextInsets,
+            child: Text(
+              widget.input.uiLabel,
+              style: inputTextStyle,
+            ),
+          ),
           Slider(
             min: 0,
             max: 255,

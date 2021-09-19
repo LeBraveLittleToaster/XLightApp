@@ -46,6 +46,9 @@ class _LightStateSetterState extends State<LightStateSetterWidget> {
       ])
     ];
     widgets.addAll(getInputWidgets(modeStore, widget.light));
+    widgets.add(Container(
+      height: 100,
+    ));
     return Scaffold(
       appBar: getXLightAppBar(widget.light.name),
       body: ListView(

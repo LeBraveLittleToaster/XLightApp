@@ -31,21 +31,23 @@ class _ModeSelectorState extends State<ModeSelectorWidget> {
               widget.onModeSet(widget.modes[index].modeId);
               Navigator.pop(context);
             },
-            child: SizedBox(
-              width: MediaQuery.of(context).size.width / 5,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Icon(Icons.ac_unit_outlined),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(8, 0, 8, 24),
-                    child: Text(widget.modes[index].name),
-                  )
-                ],
+            child: AbsorbPointer(
+              child: SizedBox(
+                width: MediaQuery.of(context).size.width / 5,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Icon(Icons.ac_unit_outlined),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(8, 0, 8, 24),
+                      child: Text(widget.modes[index].name),
+                    )
+                  ],
+                ),
               ),
             ),
           );

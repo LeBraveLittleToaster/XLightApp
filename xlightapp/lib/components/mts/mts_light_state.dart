@@ -8,8 +8,8 @@ class MtsLightState extends ChangeNotifier{
   MtsLightState({required this.modeId, required this.values});
 
   factory MtsLightState.fromJson(Map<String, dynamic> json) {
-    var jsonValues = json["values"];
-
+    List? jsonValues = json["values"];
+    
     return MtsLightState(
         modeId: json["modeId"],
         values:
