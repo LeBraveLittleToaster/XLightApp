@@ -1,4 +1,10 @@
+import 'dart:convert';
+import 'dart:io';
+import 'dart:typed_data';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:xlightapp/components/mts/mts_input.dart';
 import 'package:xlightapp/components/mts/mts_light.dart';
@@ -7,14 +13,17 @@ import 'package:xlightapp/experimental/input_widgets/hsvb_input_widget.dart';
 import 'package:xlightapp/experimental/input_widgets/range_2_input_widget.dart';
 import 'package:xlightapp/experimental/input_widgets/single_double_input_widget.dart';
 import 'package:xlightapp/experimental/mode_selector_widget.dart';
+import 'package:xlightapp/net/requester.dart';
 import 'package:xlightapp/stores/mts_light_store.dart';
 import 'package:xlightapp/stores/mts_mode_store.dart';
 import 'package:xlightapp/xlight_appbar.dart';
 
 class LightStateSetterWidget extends StatefulWidget {
+  final Image lightImage;
   final MtsLight light;
 
-  const LightStateSetterWidget({Key? key, required this.light})
+  const LightStateSetterWidget(
+      {Key? key, required this.lightImage, required this.light})
       : super(key: key);
 
   @override
@@ -22,23 +31,46 @@ class LightStateSetterWidget extends StatefulWidget {
 }
 
 class _LightStateSetterState extends State<LightStateSetterWidget> {
+  Image? lightImage;
+
+  onPictureButtonClicked(LightStore lightStore) {
+    final ImagePicker _picker = ImagePicker();
+    _picker
+        .pickImage(source: ImageSource.gallery, maxHeight: 4096, maxWidth: 4096)
+        .then((picture) async {
+      if (picture != null) {
+        setState(() {
+          lightImage = Image.file(
+            File(picture.path),
+            height: 50,
+            fit: BoxFit.fitWidth,
+          );
+        });
+        Requester.saveImage(widget.light.id, picture);
+      }
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    lightImage = widget.lightImage;
+  }
+
   @override
   Widget build(BuildContext context) {
     LightStore lightStore = Provider.of<LightStore>(context);
     ModeStore modeStore = Provider.of<ModeStore>(context);
+
     List<Widget> widgets = [
       Stack(alignment: Alignment.bottomRight, children: [
         Container(
           height: 100,
           width: MediaQuery.of(context).size.width,
-          child: Image.asset(
-            'assets/sliver_bg.png',
-            height: 50,
-            fit: BoxFit.fitWidth,
-          ),
+          child: lightImage,
         ),
         IconButton(
-            onPressed: () => print("Hello World"),
+            onPressed: () => onPictureButtonClicked(lightStore),
             icon: Icon(
               Icons.photo,
               color: Colors.white,

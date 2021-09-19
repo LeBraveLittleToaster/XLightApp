@@ -1,10 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 import 'package:provider/provider.dart';
 import 'package:xlightapp/components/mts/mts_light.dart';
-import 'package:xlightapp/components/mts/mts_light_state.dart';
 import 'package:xlightapp/experimental/light_state_setter.dart';
 import 'package:xlightapp/stores/mts_light_store.dart';
 import 'package:xlightapp/stores/mts_mode_store.dart';
@@ -83,11 +84,23 @@ Widget getGridLightItem(
     void Function(MtsLight light, LightStore lightStore) toggleLight,
     LightStore lightStore,
     BuildContext context) {
+  Image lightImage = light.picture == null
+      ? Image.asset(
+          'assets/sliver_bg.png',
+          height: 50,
+          fit: BoxFit.fitWidth,
+        )
+      : Image.memory(
+          Base64Decoder().convert(light.picture!),
+          height: 50,
+          fit: BoxFit.fitWidth,
+        );
   return GestureDetector(
     onTap: () => Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => LightStateSetterWidget(light: light))),
+            builder: (context) =>
+                LightStateSetterWidget(lightImage: lightImage, light: light))),
     child: Card(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
         elevation: 1,

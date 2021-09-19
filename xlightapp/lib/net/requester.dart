@@ -1,8 +1,11 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
+import 'package:image_picker/image_picker.dart';
 
 import 'package:xlightapp/components/mts/mts_light.dart';
 import 'package:xlightapp/components/mts/mts_light_state.dart';
@@ -19,8 +22,7 @@ class Requester {
     String url = (kIsWeb ? api_url_web : api_url_android) + "/api/lights";
     http.get(Uri.parse(url),
         headers: {http_key_content_type: http_value_content_type}).then((resp) {
-      print(utf8.decode(resp.bodyBytes));
-      List<dynamic> jsonData = jsonDecode(utf8.decode(resp.bodyBytes));
+      List<dynamic> jsonData = jsonDecode(resp.body);
       List<MtsLight> lights =
           jsonData.map((e) => MtsLight.fromJson(e)).toList();
       completer.complete(lights);
@@ -33,7 +35,6 @@ class Requester {
     String url = (kIsWeb ? api_url_web : api_url_android) + "/api/modes";
     http.get(Uri.parse(url),
         headers: {http_key_content_type: http_value_content_type}).then((resp) {
-      print(utf8.decode(resp.bodyBytes));
       List<dynamic> jsonData = jsonDecode(utf8.decode(resp.bodyBytes));
       List<MtsMode> lights = jsonData.map((e) => MtsMode.fromMap(e)).toList();
       completer.complete(lights);
@@ -44,7 +45,9 @@ class Requester {
   static Future<void> setLightState(int lightId, MtsLightState state) {
     var completer = Completer<void>();
     String url = (kIsWeb ? api_url_web : api_url_android) +
-        "/api/lights/"+lightId.toString()+"/state/" +
+        "/api/lights/" +
+        lightId.toString() +
+        "/state/" +
         state.modeId.toString() +
         "/set";
     http
@@ -70,6 +73,22 @@ class Requester {
       print("Finished setting values to server");
       completer.complete();
     });
+    return completer.future;
+  }
+
+  static Future<String> saveImage(int lightId, XFile image) async {
+    var completer = Completer<String>();
+    String url = (kIsWeb ? api_url_web : api_url_android) +
+        "/api/lights/" +
+        lightId.toString() +
+        "/picture/set";
+    var uri = Uri.parse(url);
+
+    var body = base64Encode(await image.readAsBytes());
+    print("SENDING:" + body.substring(0, 10));
+    http
+        .post(Uri.parse(url), body: body)
+        .then((value) => completer.complete("lol"));
     return completer.future;
   }
 }
