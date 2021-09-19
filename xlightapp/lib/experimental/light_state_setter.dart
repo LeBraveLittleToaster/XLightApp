@@ -27,12 +27,28 @@ class _LightStateSetterState extends State<LightStateSetterWidget> {
     LightStore lightStore = Provider.of<LightStore>(context);
     ModeStore modeStore = Provider.of<ModeStore>(context);
     List<Widget> widgets = [
-      Text("Mode=" + (widget.light.state?.modeId.toString() ?? "NotSet"))
+      Stack(alignment: Alignment.bottomRight, children: [
+        Container(
+          height: 100,
+          width: MediaQuery.of(context).size.width,
+          child: Image.asset(
+            'assets/sliver_bg.png',
+            height: 50,
+            fit: BoxFit.fitWidth,
+          ),
+        ),
+        IconButton(
+            onPressed: () => print("Hello World"),
+            icon: Icon(
+              Icons.photo,
+              color: Colors.white,
+            )),
+      ])
     ];
     widgets.addAll(getInputWidgets(modeStore, widget.light));
     return Scaffold(
       appBar: getXLightAppBar(widget.light.name),
-      body: Column(
+      body: ListView(
         children: widgets,
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
@@ -74,16 +90,21 @@ class _LightStateSetterState extends State<LightStateSetterWidget> {
         .toList();
   }
 
-  Widget buildWidgetForInput(MtsLight light, int inputIndex, MtsInput mtsInput) {
+  Widget buildWidgetForInput(
+      MtsLight light, int inputIndex, MtsInput mtsInput) {
     switch (mtsInput.inputType) {
       case InputType.HSV:
-        return HsvInputWidget(light:light, inputIndex: inputIndex,input: mtsInput);
+        return HsvInputWidget(
+            light: light, inputIndex: inputIndex, input: mtsInput);
       case InputType.HSVB:
-        return HsvbInputWidget(light:light,inputIndex: inputIndex, input: mtsInput);
+        return HsvbInputWidget(
+            light: light, inputIndex: inputIndex, input: mtsInput);
       case InputType.SINGLE_DOUBLE:
-        return SingleInputWidget(light:light,inputIndex: inputIndex,input: mtsInput);
+        return SingleInputWidget(
+            light: light, inputIndex: inputIndex, input: mtsInput);
       case InputType.RANGE_2_DOUBLE:
-        return Range2InputWidget(light:light,inputIndex: inputIndex,input: mtsInput);
+        return Range2InputWidget(
+            light: light, inputIndex: inputIndex, input: mtsInput);
     }
   }
 

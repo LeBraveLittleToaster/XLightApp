@@ -27,43 +27,41 @@ class _LightDashboardState extends State<LightDashboardWidget> {
         .map((light) =>
             getGridLightItem(light, _toggleLight, lightStore, context))
         .toList();
-    return CustomScrollView(
-      slivers: [
-        SliverAppBar(
-          snap: true,
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(36),
-                  bottomRight: Radius.circular(36))),
-          elevation: 30,
-          shadowColor: Colors.black,
-          actions: [
-            IconButton(
-                onPressed: () {
-                  print("Hello World");
-                },
-                icon: Icon(Icons.photo))
-          ],
-          stretch: true,
-          floating: true,
-          flexibleSpace: FlexibleSpaceBar(
-            title: Text("My Dashboard"),
-            centerTitle: true,
-            stretchModes: [
-              StretchMode.zoomBackground,
-              StretchMode.blurBackground,
-              StretchMode.fadeTitle
-            ],
+    return NestedScrollView(
+        headerSliverBuilder: (context, bool innerBoxIsScrolled) {
+      return <Widget>[
+        SliverOverlapAbsorber(
+          handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+          sliver: SliverAppBar(
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+            shadowColor: Colors.transparent,
+            pinned: true,
+            expandedHeight: 300,
+            flexibleSpace: FlexibleSpaceBar(
+                background: Image.asset(
+                  'assets/sliver_bg.png',
+                  fit: BoxFit.cover,
+                ),
+                centerTitle: true,
+                title: const Text(
+                  "Light Studio",
+                  style: TextStyle(color: Colors.black),
+                )),
           ),
-          expandedHeight: 250,
-        ),
+        )
+      ];
+    }, body: SafeArea(child: Builder(builder: (context) {
+      return CustomScrollView(slivers: [
+        SliverOverlapInjector(
+            handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context)),
         SliverGrid.count(
             crossAxisSpacing: 1.0,
-            mainAxisSpacing: 1.3,
+            mainAxisSpacing: 1.0,
             crossAxisCount: 2,
             children: gridItems)
-      ],
-    );
+      ]);
+    })));
   }
 }
 
