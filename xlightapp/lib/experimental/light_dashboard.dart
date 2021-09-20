@@ -90,11 +90,7 @@ Widget getGridLightItem(
           height: 50,
           fit: BoxFit.fitWidth,
         )
-      : Image.memory(
-          Base64Decoder().convert(light.picture!),
-          height: 50,
-          fit: BoxFit.fitWidth,
-        );
+      : light.picture!;
   return GestureDetector(
     onTap: () => Navigator.push(
         context,

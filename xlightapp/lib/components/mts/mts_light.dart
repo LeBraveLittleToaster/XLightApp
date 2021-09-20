@@ -6,7 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'mts_light_state.dart';
 
 class MtsLight with ChangeNotifier {
-  String? picture;
+  Image? picture;
   int id;
   String name;
   String location;
@@ -27,7 +27,7 @@ class MtsLight with ChangeNotifier {
   });
 
   factory MtsLight.fromJson(Map<String, dynamic> json) => MtsLight(
-      picture: json["picture"] != null ?Utf8Decoder().convert(Base64Decoder().convert(json["picture"])) : null,
+      picture: _convertToImage(json["picture"]),
       id: json["id"] ?? -1,
       name: json["name"] ?? "Name not found",
       location: json["location"] ?? "No location set",
@@ -46,6 +46,18 @@ class MtsLight with ChangeNotifier {
         "state": state?.toJson(),
         "supportedModes": supportedModes
       };
+
+  static Image? _convertToImage(String? picture) {
+    if (picture == null) {
+      return null;
+    }
+    return Image.memory(
+      Base64Decoder()
+          .convert(Utf8Decoder().convert(Base64Decoder().convert(picture))),
+      height: 50,
+      fit: BoxFit.fitWidth,
+    );
+  }
 
   @override
   String toString() {

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+
 import 'package:xlightapp/experimental/light_dashboard.dart';
 import 'package:xlightapp/stores/mts_light_store.dart';
 import 'package:xlightapp/stores/mts_mode_store.dart';
-import 'package:xlightapp/xlight_appbar.dart';
 
 final bool isInTestState = false;
 
@@ -47,11 +47,68 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  bool showsOnlyOffLights = false;
+  TextEditingController _createLightName = TextEditingController();
+  TextEditingController _createLightLocation = TextEditingController();
+
+  void _onAddLightClicked(LightStore lightStore) async {
+    const EdgeInsets insetsText = EdgeInsets.fromLTRB(16, 16, 16, 0);
+    const EdgeInsets insetsTextField = EdgeInsets.fromLTRB(16, 0, 16, 16);
+    showDialog(
+      context: context,
+      builder: (context) {
+        return Dialog(
+          child: ListView(
+            children: [
+              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Text("Add new light"),
+                ),
+                IconButton(
+                    onPressed: () => Navigator.pop(context),
+                    icon: Icon(Icons.done))
+              ]),
+              Padding(
+                padding: insetsText,
+                child: Text("Name"),
+              ),
+              Padding(
+                padding: insetsTextField,
+                child: TextField(),
+              ),
+              Padding(
+                padding: insetsText,
+                child: Text("Location"),
+              ),
+              Padding(
+                padding: insetsTextField,
+                child: TextField(),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
+    LightStore lightStore = Provider.of<LightStore>(context);
     return Scaffold(
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            const DrawerHeader(
+                decoration: BoxDecoration(color: Colors.black),
+                child: Text("Drawer Head")),
+            ListTile(
+              title: const Text("Add Light"),
+              onTap: () => _onAddLightClicked(lightStore),
+            )
+          ],
+        ),
+      ),
       body: Container(
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
