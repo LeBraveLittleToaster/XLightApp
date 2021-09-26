@@ -6,6 +6,7 @@ import 'dart:typed_data';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
+import 'package:xlightapp/components/mts/mts_control_group.dart';
 
 import 'package:xlightapp/components/mts/mts_light.dart';
 import 'package:xlightapp/components/mts/mts_light_state.dart';
@@ -17,6 +18,20 @@ String api_url_web = "http://localhost:8080";
 String api_url_android = "http://192.168.0.242:8080";
 
 class Requester {
+  static Future<List<MtsControlGroup>> getControlGroupList() {
+    var completer = Completer<List<MtsControlGroup>>();
+    String url =
+        (kIsWeb ? api_url_web : api_url_android) + "/api/control/groups";
+    http.get(Uri.parse(url),
+        headers: {http_key_content_type: http_value_content_type}).then((resp) {
+      List<dynamic> jsonData = jsonDecode(resp.body);
+      List<MtsControlGroup> groups =
+          jsonData.map((e) => MtsControlGroup.fromJson(e)).toList();
+      completer.complete(groups);
+    });
+    return completer.future;
+  }
+
   static Future<List<MtsLight>> getLightList() {
     var completer = Completer<List<MtsLight>>();
     String url = (kIsWeb ? api_url_web : api_url_android) + "/api/lights";

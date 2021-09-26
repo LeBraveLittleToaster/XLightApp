@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:xlightapp/components/mts/mts_control_group.dart';
 
 import 'package:xlightapp/experimental/light_dashboard.dart';
+import 'package:xlightapp/stores/mts_control_group_store.dart';
 import 'package:xlightapp/stores/mts_light_store.dart';
 import 'package:xlightapp/stores/mts_mode_store.dart';
 
-final bool isInTestState = false;
+const bool isInTestState = false;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -25,6 +27,8 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider<ModeStore>(
             create: (_) => ModeStore().init(isInTestState)),
+        ChangeNotifierProvider<MtsControlGroupStore>(
+            create: (_) => MtsControlGroupStore().init(isInTestState)),
         ChangeNotifierProvider<LightStore>(
             create: (_) => LightStore().init(isInTestState))
       ],
