@@ -64,27 +64,27 @@ class _MyHomePageState extends State<MyHomePage> {
           child: ListView(
             children: [
               Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
+                const Padding(
+                  padding: EdgeInsets.all(16.0),
                   child: Text("Add new light"),
                 ),
                 IconButton(
                     onPressed: () => Navigator.pop(context),
-                    icon: Icon(Icons.done))
+                    icon: const Icon(Icons.done))
               ]),
-              Padding(
+              const Padding(
                 padding: insetsText,
                 child: Text("Name"),
               ),
-              Padding(
+              const Padding(
                 padding: insetsTextField,
                 child: TextField(),
               ),
-              Padding(
+              const Padding(
                 padding: insetsText,
                 child: Text("Location"),
               ),
-              Padding(
+              const Padding(
                 padding: insetsTextField,
                 child: TextField(),
               ),

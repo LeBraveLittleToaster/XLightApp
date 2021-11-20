@@ -46,7 +46,7 @@ class _LightStateSetterState extends State<LightStateSetterWidget> {
             fit: BoxFit.fitWidth,
           );
         });
-        Requester.saveImage(widget.light.id, picture);
+        Requester.saveImage(widget.light.lightId, picture);
       }
     });
   }

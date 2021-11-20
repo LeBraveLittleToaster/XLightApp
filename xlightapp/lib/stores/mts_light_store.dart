@@ -14,7 +14,7 @@ class LightStore extends ChangeNotifier {
   LightStore init(bool testMe) {
     if (testMe) {
       lights.add(MtsLight(
-          id: 0,
+          lightId: "0",
           name: "Headlamp",
           location: "Living Room",
           mac: "Mac1",
@@ -22,7 +22,7 @@ class LightStore extends ChangeNotifier {
           supportedModes: [1, 2, 3, 5],
           state: null));
       lights.add(MtsLight(
-          id: 1,
+          lightId: "1",
           name: "TV Backlight",
           location: "Living Room",
           mac: "Mac2",
@@ -55,7 +55,7 @@ class LightStore extends ChangeNotifier {
   void toggleLight(MtsLight light) {
     int indexOfLight = lights.indexOf(light);
     lights[indexOfLight].isOn = !lights[indexOfLight].isOn;
-    synchronizeLightIsOn(light.id, lights[indexOfLight].isOn);
+    synchronizeLightIsOn(light.lightId, lights[indexOfLight].isOn);
     notifyListeners();
   }
 
@@ -63,7 +63,7 @@ class LightStore extends ChangeNotifier {
     int lightIndex = lights.indexOf(light);
     lights[lightIndex].state =
         MtsLightState(modeId: mode.modeId, values: generateDefaultValues(mode));
-    synchronizeLightStateToServer(light.id, lights[lightIndex].state!);
+    synchronizeLightStateToServer(light.lightId, lights[lightIndex].state!);
     notifyListeners();
   }
 
@@ -71,14 +71,14 @@ class LightStore extends ChangeNotifier {
       MtsLight light, int inputIndex, List<double> values) {
     int lightIndex = lights.indexOf(light);
     lights[lightIndex].state?.values[inputIndex].values = values;
-    synchronizeLightStateToServer(light.id, lights[lightIndex].state!);
+    synchronizeLightStateToServer(light.lightId, lights[lightIndex].state!);
     notifyListeners();
   }
 
   void setLightState(MtsLight light, MtsLightState state) {
     int lightIndex = lights.indexOf(light);
     lights[lightIndex].state = state;
-    synchronizeLightStateToServer(light.id, lights[lightIndex].state!);
+    synchronizeLightStateToServer(light.lightId, lights[lightIndex].state!);
     notifyListeners();
   }
 
@@ -106,13 +106,13 @@ class LightStore extends ChangeNotifier {
     }
   }
 
-  void synchronizeLightStateToServer(int lightId, MtsLightState lightState) {
+  void synchronizeLightStateToServer(String lightId, MtsLightState lightState) {
     print("Synchronizing lightstate: " + lightState.toString());
     Requester.setLightState(lightId, lightState)
         .then((value) => print("Success setting lightstate"));
   }
 
-  void synchronizeLightIsOn(int lightId, bool isOn) {
+  void synchronizeLightIsOn(String lightId, bool isOn) {
     Requester.setLightIsOn(lightId, isOn)
         .then((value) => print("Success setting isOn"));
   }

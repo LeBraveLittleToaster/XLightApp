@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:typed_data';
 
 import 'package:flutter/cupertino.dart';
 
@@ -7,7 +6,7 @@ import 'mts_light_state.dart';
 
 class MtsLight with ChangeNotifier {
   Image? picture;
-  int id;
+  String lightId;
   String name;
   String location;
   String mac;
@@ -17,7 +16,7 @@ class MtsLight with ChangeNotifier {
 
   MtsLight({
     this.picture,
-    required this.id,
+    required this.lightId,
     required this.name,
     required this.location,
     required this.mac,
@@ -28,7 +27,7 @@ class MtsLight with ChangeNotifier {
 
   factory MtsLight.fromJson(Map<String, dynamic> json) => MtsLight(
       picture: _convertToImage(json["picture"]),
-      id: json["id"] ?? -1,
+      lightId: json["lightId"] ?? "",
       name: json["name"] ?? "Name not found",
       location: json["location"] ?? "No location set",
       mac: json["mac"] ?? "No mac found",
@@ -61,6 +60,6 @@ class MtsLight with ChangeNotifier {
 
   @override
   String toString() {
-    return "{name=$name, location=$location, mac=$mac, isOn=$isOn, state=$state}";
+    return "{\n lightId=$lightId,\n name=$name,\n location=$location,\n supportedModes=$supportedModes,\n mac=$mac,\n isOn=$isOn,\n state=$state\n}";
   }
 }

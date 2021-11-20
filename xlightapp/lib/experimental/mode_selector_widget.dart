@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:xlightapp/components/mts/mts_light.dart';
 import 'package:xlightapp/components/mts/mts_mode.dart';
+import 'package:xlightapp/experimental/mode_icon_translator.dart';
 import 'package:xlightapp/stores/mts_light_store.dart';
 
 class ModeSelectorWidget extends StatefulWidget {
@@ -35,16 +36,21 @@ class _ModeSelectorState extends State<ModeSelectorWidget> {
               child: SizedBox(
                 width: MediaQuery.of(context).size.width / 5,
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    const Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: Icon(Icons.ac_unit_outlined),
+                    Padding(
+                      padding: const EdgeInsets.all(4.0),
+                      child:
+                          Icon(modeId_icon_mapping[widget.modes[index].modeId]),
                     ),
                     Padding(
                       padding: const EdgeInsets.fromLTRB(8, 0, 8, 24),
-                      child: Text(widget.modes[index].name),
+                      child: Text(
+                        widget.modes[index].name,
+                        textAlign: TextAlign.center,
+                      ),
                     )
                   ],
                 ),

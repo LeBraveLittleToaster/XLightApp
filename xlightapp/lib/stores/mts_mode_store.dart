@@ -34,6 +34,9 @@ class ModeStore extends ChangeNotifier {
       Requester.getModeList().then((loadedModes) {
         isLoading = false;
         modes = loadedModes;
+        print("+++++++++++LOADED MODES++++++++");
+        print(modes.toString());
+        print("+++++++++++LOADED MODES++++++++");
         notifyListeners();
       });
     }

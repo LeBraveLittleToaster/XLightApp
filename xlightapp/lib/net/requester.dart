@@ -15,7 +15,7 @@ import 'package:xlightapp/components/mts/mts_mode.dart';
 String http_key_content_type = "Content-Type";
 String http_value_content_type = "application/json";
 String api_url_web = "http://localhost:8080";
-String api_url_android = "http://192.168.0.242:8080";
+String api_url_android = "http://192.168.2.107:8080";
 
 class Requester {
   static Future<List<MtsControlGroup>> getControlGroupList() {
@@ -34,7 +34,7 @@ class Requester {
 
   static Future<List<MtsLight>> getLightList() {
     var completer = Completer<List<MtsLight>>();
-    String url = (kIsWeb ? api_url_web : api_url_android) + "/api/lights";
+    String url = (kIsWeb ? api_url_web : api_url_android) + "/lights";
     http.get(Uri.parse(url),
         headers: {http_key_content_type: http_value_content_type}).then((resp) {
       List<dynamic> jsonData = jsonDecode(resp.body);
@@ -47,28 +47,42 @@ class Requester {
 
   static Future<List<MtsMode>> getModeList() {
     var completer = Completer<List<MtsMode>>();
-    String url = (kIsWeb ? api_url_web : api_url_android) + "/api/modes";
+    String url = (kIsWeb ? api_url_web : api_url_android) + "/modes";
     http.get(Uri.parse(url),
         headers: {http_key_content_type: http_value_content_type}).then((resp) {
       List<dynamic> jsonData = jsonDecode(utf8.decode(resp.bodyBytes));
-      List<MtsMode> lights = jsonData.map((e) => MtsMode.fromMap(e)).toList();
-      completer.complete(lights);
+      List<MtsMode> modes = jsonData.map((e) => MtsMode.fromMap(e)).toList();
+      completer.complete(modes);
     });
     return completer.future;
   }
 
-  static Future<void> setLightState(int lightId, MtsLightState state) {
+  static Future<void> setLightState(String lightId, MtsLightState state) {
     var completer = Completer<void>();
-    String url = (kIsWeb ? api_url_web : api_url_android) +
-        "/api/lights/" +
-        lightId.toString() +
-        "/state/" +
-        state.modeId.toString() +
-        "/set";
+    String url = (kIsWeb ? api_url_web : api_url_android) + "/lights/mode/set";
     http
         .put(Uri.parse(url),
             headers: {http_key_content_type: http_value_content_type},
-            body: jsonEncode(state.values))
+            body: jsonEncode({
+              "values": state.values,
+              "modeId": state.modeId,
+              "lightId": lightId
+            }))
+        .then((resp) {
+      print("RESP:" + resp.body);
+      print("Finished setting values to server");
+      completer.complete();
+    });
+    return completer.future;
+  }
+
+  static Future<void> setLightIsOn(String lightId, bool isOn) {
+    var completer = Completer<void>();
+    String url = (kIsWeb ? api_url_web : api_url_android) + "/lights/isOn/set";
+    http
+        .put(Uri.parse(url),
+            headers: {http_key_content_type: http_value_content_type},
+            body: jsonEncode({"isOn": isOn, "lightId": lightId}))
         .then((resp) {
       print("Finished setting values to server");
       completer.complete();
@@ -76,25 +90,10 @@ class Requester {
     return completer.future;
   }
 
-  static Future<void> setLightIsOn(int lightId, bool isOn) {
-    var completer = Completer<void>();
-    String url = (kIsWeb ? api_url_web : api_url_android) +
-        "/api/lights/" +
-        lightId.toString() +
-        "/set?isOn=" +
-        isOn.toString();
-    http.put(Uri.parse(url),
-        headers: {http_key_content_type: http_value_content_type}).then((resp) {
-      print("Finished setting values to server");
-      completer.complete();
-    });
-    return completer.future;
-  }
-
-  static Future<String> saveImage(int lightId, XFile image) async {
+  static Future<String> saveImage(String lightId, XFile image) async {
     var completer = Completer<String>();
     String url = (kIsWeb ? api_url_web : api_url_android) +
-        "/api/lights/" +
+        "/lights/" +
         lightId.toString() +
         "/picture/set";
     var uri = Uri.parse(url);
